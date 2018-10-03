@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.MapData;
 using Assets.Scripts.Systems.MapSystem;
 using HexEd;
+using HexEd.Tools;
 using MapData;
 using UnityEditor;
 using UnityEngine;
@@ -30,7 +32,7 @@ namespace Assets.Scripts.HexEd
             Map.SetTileType(Vector2.zero, TileType.Buildslot);
             Map.SetTileType(new Vector2(3, 3), TileType.Buildslot);
             Map.SetTileType(new Vector2(1, 3), TileType.Buildslot);
-            
+
             Map.SetTileType(new Vector2(-3, 7), TileType.Buildslot);
             Map.SetTileType(new Vector2(-1, 5), TileType.Buildslot);
             Map.SetTileType(new Vector2(9, 9), TileType.Buildslot);
@@ -42,70 +44,72 @@ namespace Assets.Scripts.HexEd
             UiManager.Instance.Camera.CenterCameraToMap(Map);
         }
 
-/*
-        public void GenerateEmptyMap(int width, int height)
+
+        // TODO: Refactor into separate class
+
+        private List<List<Action>> _actionHistory = new List<List<Action>>();
+        private List<List<Action>> _actionFuture = new List<List<Action>>();
+        private List<Action> _actionGroup;
+
+        public void NewActionGroup()
         {
-            Map = new GameObject("Map", typeof(Map)).GetComponent<Map>();
-            Map.Tiles = new List<List<Tile>>();
-
-            for (int rowIndex = 0; rowIndex < height; rowIndex++)
+            if (_actionGroup != null && _actionGroup.Count > 0)
             {
-                List<Tile> row = new List<Tile>();
-                Map.Tiles.Add(row);
-
-                for (int columnIndex = 0; columnIndex < width; columnIndex++)
-                {
-                    Tile tile = TileProvider.GetTile(TileType.Buildslot);
-                    tile.transform.parent = Map.transform;
-                    tile.Position = new Vector2(rowIndex, columnIndex);
-
-                    Vector3 newPosition = new Vector3
-                    {
-                        x = (innerRadius * 2 + tileSpacing) * columnIndex,
-                        z = -(outerRadius * 2 + tileSpacing) * (3f / 4f) * rowIndex,
-                        y = baseHeight
-                    };
-
-                    if (rowIndex % 2 == 0)
-                    {
-                        newPosition.x -= (innerRadius * 2 + tileSpacing) / 2;
-                    }
-
-                    tile.transform.SetPositionAndRotation(newPosition, tile.transform.rotation);
-
-                    row.Add(tile);
-                }
-
+                _actionHistory.Add(new List<Action>(_actionGroup));
+                _actionGroup = null;
             }
 
-            CalculateMapExtents();
-            UiManager.Instance.Camera.CenterCameraToMap(Map);
+            _actionGroup = new List<Action>();
         }
-*/
-        /*
-        private void CalculateMapExtents()
+
+        public void AddAction(Action action)
         {
-            MapExtents extents = new MapExtents();
+            // Adding ANY action removes the whole action future!
+            _actionFuture = new List<List<Action>>();
 
-            extents.Width = Map.Tiles[0].Count * innerRadius * 2;
+            _actionGroup.Add(action);
+            action.Execute();
+        }
 
-            if (Map.Tiles[0].Count % 2 != 0)
+        public void RevertLastStep()
+        {
+            NewActionGroup();
+
+            if (_actionHistory.Count == 0)
+                return;
+            
+            // Get the last ActionGroup, revert it and add it to the action future.
+            var findLast = _actionHistory.Last();
+            if (findLast == null)
+                return;
+
+            for (var i = findLast.Count - 1; i >= 0; i--)
             {
-                extents.Width += innerRadius;
+                findLast[i].Revert();
             }
 
-            var h = Map.Tiles.Count;
-            extents.Height = Mathf.Ceil(h / 2f) * 2 * outerRadius + Mathf.Floor(h / 2f) * outerRadius;
-
-            extents.LeftBound = Map.Tiles[0][0].transform.position.x - innerRadius;
-            extents.UpperBound = Map.Tiles[0][0].transform.position.z + outerRadius;
-
-            Map.Extents = extents;
+            _actionFuture.Add(findLast);
+            _actionHistory.Remove(findLast);
         }
 
-        public void CleanMap()
+        public void RedoNextStep()
         {
-            Map.Tiles.ForEach(row => row.ForEach(tile => Destroy(tile.gameObject)));
-        }*/
+            NewActionGroup();
+
+            if (_actionFuture.Count == 0)
+                return;
+
+            var actions = _actionFuture.Last();
+            if (actions == null)
+                return;
+
+            foreach (var action in actions)
+            {
+                action.Execute();
+            }
+
+            _actionHistory.Add(actions);
+            _actionFuture.Remove(actions);
+        }
     }
 }

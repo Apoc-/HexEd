@@ -43,6 +43,20 @@ public class Map : MonoBehaviour
 
     public Dictionary<Vector2, Tile> Tiles { get; set; } = new Dictionary<Vector2, Tile>();
 
+    public void SetTileHeight(Vector2 position, float newHeight)
+    {
+        if (!Tiles.ContainsKey(position))
+        {
+            return; // TODO: error
+        }
+
+        Tiles[position].Height = newHeight;
+        var pos = Tiles[position].transform.position;
+        pos.y = newHeight;
+
+        Tiles[position].transform.position = pos;
+    }
+
     public void SetTileType(Vector2 position, TileType type)
     {
         if (!Tiles.ContainsKey(position))
@@ -51,7 +65,7 @@ public class Map : MonoBehaviour
             Tiles[position].transform.parent = transform;
             Tiles[position].transform.position = GetPositionForCoordinate(position);
             Tiles[position].Position = position;
-            Tiles[position].Height = 1;
+            Tiles[position].Height = baseHeight;
         }
         else
         {
@@ -137,7 +151,7 @@ public class Map : MonoBehaviour
             var newPos = GetNeighbourPosition(position, idx);
             if (!Tiles.ContainsKey(newPos))
                 continue;
-            if(Tiles[newPos].Type != TileType.Void)
+            if (Tiles[newPos].Type != TileType.Void)
                 continue;
             // count the tiles around that are NOT void or null
             var count = 0;

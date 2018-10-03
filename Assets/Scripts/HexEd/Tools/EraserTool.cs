@@ -9,12 +9,15 @@ namespace HexEd.Tools
     {
         public override void OnTileClick(Tile tile)
         {
-            MapManager.Instance.Map.SetTileType(tile.Position, TileType.Void);
+            MapManager.Instance.NewActionGroup();
+            OnTileDrag(tile);
         }
 
         public override void OnTileDrag(Tile tile)
         {
-            OnTileClick(tile);
+            if (tile.Type == TileType.Void) return;
+            var action = new Action(tile) {NewState = {Type = TileType.Void}};
+            MapManager.Instance.AddAction(action);
         }
 
         public override void OnTileScrollStart(Tile tile, Vector3 firstMousePos)

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.MapData;
+﻿using System.Collections.Generic;
+using Assets.Scripts.MapData;
 using HexEd.Tools;
 using MapData;
 using TMPro;
@@ -99,31 +100,6 @@ namespace Assets.Scripts.HexEd
             if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return null;
 
             return hit.transform.gameObject.GetComponent<Tile>();
-        }
-
-
-        public void SelectTile(Tile tile)
-        {
-            if (_currentSelectedTile == tile)
-            {
-                return;
-            }
-
-            if (_currentSelectedTile != null && _currentSelectedTile != tile)
-            {
-                DeselectTile();
-            }
-
-            _currentSelectedTile = tile;
-            var mesh = _currentSelectedTile.GetComponent<MeshRenderer>();
-            mesh.material.color = Color.green;
-        }
-
-        public void DeselectTile()
-        {
-            var mesh = _currentSelectedTile.GetComponent<MeshRenderer>();
-            mesh.material.color = Color.white;
-            _currentSelectedTile = null;
         }
 
         public void SetToolBrush()
