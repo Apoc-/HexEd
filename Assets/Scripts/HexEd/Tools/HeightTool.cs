@@ -34,7 +34,7 @@ namespace HexEd.Tools
         {
             if (tile.Type == TileType.Void) return;
             
-            int zDiff = (int) ((currentMousePos - initialMousePos).y / 15);
+            var zDiff = (int) ((currentMousePos - initialMousePos).y / 15);
             var newHeight = Math.Max(-8, initialHeight + zDiff * 0.1f) ;
             newHeight = Math.Min(0, newHeight);
             

@@ -27,6 +27,11 @@ namespace Assets.Scripts.HexEd
 
         private void GenerateDefaultMap()
         {
+            if (Map != null)
+            {
+                Destroy(Map);
+            }
+            
             Map = new GameObject("Map", typeof(Map)).GetComponent<Map>();
             Map.Tiles = new Dictionary<Vector2, Tile>();
             Map.SetTileType(Vector2.zero, TileType.Buildslot);
@@ -110,6 +115,12 @@ namespace Assets.Scripts.HexEd
 
             _actionHistory.Add(actions);
             _actionFuture.Remove(actions);
+        }
+        
+        // TODO: Refactor to separate class
+        public void SaveMap()
+        {
+            
         }
     }
 }
