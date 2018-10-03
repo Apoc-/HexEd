@@ -1,5 +1,6 @@
 using Assets.Scripts.HexEd;
 using Assets.Scripts.MapData;
+using HexEd.Actions;
 using MapData;
 using UnityEngine;
 
@@ -9,15 +10,15 @@ namespace HexEd.Tools
     {
         public override void OnTileClick(Tile tile)
         {
-            MapManager.Instance.NewActionGroup();
+            ActionManager.Instance.StartNewActionGroup();
             OnTileDrag(tile);
         }
 
         public override void OnTileDrag(Tile tile)
         {
             if (tile.Type == TileType.Void) return;
-            var action = new Action(tile) {NewState = {Type = TileType.Void}};
-            MapManager.Instance.AddAction(action);
+            var action = new TileAction(tile).SetNewType(TileType.Void);
+            ActionManager.Instance.AddAndExecuteAction(action);
         }
 
         public override void OnTileScrollStart(Tile tile, Vector3 firstMousePos)

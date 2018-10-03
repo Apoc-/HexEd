@@ -54,12 +54,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\HexEd\Actions\Action.cs" />
+    <Compile Include="Assets\Scripts\HexEd\Actions\ActionManager.cs" />
+    <Compile Include="Assets\Scripts\HexEd\Actions\TileAction.cs" />
     <Compile Include="Assets\Scripts\HexEd\CameraHandler.cs" />
     <Compile Include="Assets\Scripts\HexEd\MapManager.cs" />
     <Compile Include="Assets\Scripts\HexEd\Singleton.cs" />
     <Compile Include="Assets\Scripts\HexEd\TileProvider.cs" />
     <Compile Include="Assets\Scripts\HexEd\TileSelectionManager.cs" />
-    <Compile Include="Assets\Scripts\HexEd\Tools\Action.cs" />
     <Compile Include="Assets\Scripts\HexEd\Tools\BrushTool.cs" />
     <Compile Include="Assets\Scripts\HexEd\Tools\EraserTool.cs" />
     <Compile Include="Assets\Scripts\HexEd\Tools\HeightTool.cs" />
