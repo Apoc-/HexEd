@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.HexEd
+﻿using HexEd;
+
+namespace Assets.Scripts.HexEd
 {
     public class UiManager : Singleton<UiManager>
     {
@@ -30,8 +32,8 @@
 
         public void OnNewButtonClicked()
         {
-            MapManager.Instance.CleanMap();
-            MapManager.Instance.GenerateEmptyMap(2,4);
+            //MapManager.Instance.CleanMap();
+            //MapManager.Instance.GenerateEmptyMap(2,4);
         }
     }
 }

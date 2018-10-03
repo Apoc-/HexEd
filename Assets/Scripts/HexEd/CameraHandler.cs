@@ -74,6 +74,7 @@ namespace Assets.Scripts.HexEd
             var pos = gameObject.transform.position;
             pos.z += verticalInput * panSpeed;
 
+            /**
             //clamp movement to map extends
             var upper = MapManager.Instance.Map.Extents.UpperBound;
             var left = MapManager.Instance.Map.Extents.LeftBound;
@@ -85,7 +86,7 @@ namespace Assets.Scripts.HexEd
 
             if (pos.z > upper) pos.z = upper;
             if (pos.z < upper - height) pos.z = upper - height;
-
+*/
             gameObject.transform.position = pos;
         }
     }

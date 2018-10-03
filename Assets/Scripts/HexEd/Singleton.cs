@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.HexEd
+namespace HexEd
 {
     /// <summary>
     /// Be aware this will not prevent a non singleton constructor

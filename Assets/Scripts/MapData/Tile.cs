@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Scripts.MapData;
 using UnityEngine;
 
-namespace Assets.Scripts.MapData
+namespace MapData
 {
     public class Tile : MonoBehaviour
     {
         public TileType Type { get; set; }
         public Vector2 Position { get; set; }
-        public float Height { get; }
+        public float Height { get; set; }
 
         public int Variant { get; set; }
     }

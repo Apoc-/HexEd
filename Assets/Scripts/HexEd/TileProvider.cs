@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.MapData;
+using MapData;
 using UnityEngine;
 using Random = System.Random;
 
@@ -10,6 +11,7 @@ namespace Assets.Scripts.Systems.MapSystem
     {
         private static string tileMaterialsPath = "Materials/Tiles/";
         private static string tileBottomMaterialName = "Bottom";
+        private static string tileBottomMaterialNameVoid = "VoidBottom";
         private static string tilePrefabPath = "Prefabs/Tile";
 
         private static readonly Dictionary<TileType, List<String>> TileMaterials = new Dictionary<TileType, List<string>>
@@ -31,7 +33,6 @@ namespace Assets.Scripts.Systems.MapSystem
         public static Tile GetTile(TileType type, int variant = 0)
         {
             Tile tile = Instantiate(Resources.Load<Tile>(tilePrefabPath));
-
             tile.Type = type;
             tile.Variant = variant;
 
@@ -45,7 +46,6 @@ namespace Assets.Scripts.Systems.MapSystem
             var materials = TileMaterials[tile.Type];
             var materialName = materials[tile.Variant];
             var topMaterial = Resources.Load<Material>(tileMaterialsPath + materialName);
-            var bottomMaterial = Resources.Load<Material>(tileMaterialsPath + tileBottomMaterialName);
             
             var renderer = tile.GetComponent<MeshRenderer>();
             var mats = renderer.materials;
@@ -54,10 +54,12 @@ namespace Assets.Scripts.Systems.MapSystem
 
             if (tile.Type == TileType.Void)
             {
-                mats[1] = topMaterial;
+                var bottomMaterial = Resources.Load<Material>(tileMaterialsPath + tileBottomMaterialNameVoid);
+                mats[1] = bottomMaterial;
             }
             else
             {
+                var bottomMaterial = Resources.Load<Material>(tileMaterialsPath + tileBottomMaterialName);
                 mats[1] = bottomMaterial;
             }
 

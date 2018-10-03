@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.MapData;
 using Assets.Scripts.Systems.MapSystem;
+using HexEd;
+using MapData;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,9 +19,30 @@ namespace Assets.Scripts.HexEd
 
         void Start()
         {
-            GenerateEmptyMap(16, 12);
+            GenerateDefaultMap();
+            // GenerateEmptyMap(16, 12);
         }
 
+        private void GenerateDefaultMap()
+        {
+            Map = new GameObject("Map", typeof(Map)).GetComponent<Map>();
+            Map.Tiles = new Dictionary<Vector2, Tile>();
+            Map.SetTileType(Vector2.zero, TileType.Buildslot);
+            Map.SetTileType(new Vector2(3, 3), TileType.Buildslot);
+            Map.SetTileType(new Vector2(1, 3), TileType.Buildslot);
+            
+            Map.SetTileType(new Vector2(-3, 7), TileType.Buildslot);
+            Map.SetTileType(new Vector2(-1, 5), TileType.Buildslot);
+            Map.SetTileType(new Vector2(9, 9), TileType.Buildslot);
+            Map.SetTileType(new Vector2(9, -3), TileType.Buildslot);
+            //Map.SetTileType(new Vector2(0, 1), TileType.Buildslot);
+            //Map.SetTileType(new Vector2(0, 2), TileType.Buildslot);
+            //Map.SetTileType(new Vector2(1, 0), TileType.Buildslot);
+            //Map.SetTileType(new Vector2(2, 0), TileType.Buildslot);
+            UiManager.Instance.Camera.CenterCameraToMap(Map);
+        }
+
+/*
         public void GenerateEmptyMap(int width, int height)
         {
             Map = new GameObject("Map", typeof(Map)).GetComponent<Map>();
@@ -58,7 +81,8 @@ namespace Assets.Scripts.HexEd
             CalculateMapExtents();
             UiManager.Instance.Camera.CenterCameraToMap(Map);
         }
-
+*/
+        /*
         private void CalculateMapExtents()
         {
             MapExtents extents = new MapExtents();
@@ -71,7 +95,7 @@ namespace Assets.Scripts.HexEd
             }
 
             var h = Map.Tiles.Count;
-            extents.Height = Mathf.Ceil(h/2f) * 2 * outerRadius + Mathf.Floor(h/2f) * outerRadius;
+            extents.Height = Mathf.Ceil(h / 2f) * 2 * outerRadius + Mathf.Floor(h / 2f) * outerRadius;
 
             extents.LeftBound = Map.Tiles[0][0].transform.position.x - innerRadius;
             extents.UpperBound = Map.Tiles[0][0].transform.position.z + outerRadius;
@@ -82,6 +106,6 @@ namespace Assets.Scripts.HexEd
         public void CleanMap()
         {
             Map.Tiles.ForEach(row => row.ForEach(tile => Destroy(tile.gameObject)));
-        }
+        }*/
     }
 }
