@@ -10,6 +10,7 @@ namespace HexEd.Tools
     {
         public override void OnTileClick(Tile tile)
         {
+            if (tile.Type == TileType.Void) return;
             ActionManager.Instance.StartNewActionGroup();
             OnTileDrag(tile);
         }
@@ -17,7 +18,9 @@ namespace HexEd.Tools
         public override void OnTileDrag(Tile tile)
         {
             if (tile.Type == TileType.Void) return;
-            var action = new TileAction(tile).SetNewType(TileType.Void);
+            var action = new TileAction(tile)
+                .SetNewType(TileType.Void)
+                .SetNewHeight(MapManager.BaseHeight);
             ActionManager.Instance.AddAndExecuteAction(action);
         }
 

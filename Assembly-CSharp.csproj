@@ -67,6 +67,8 @@
     <Compile Include="Assets\Scripts\HexEd\Tools\HeightTool.cs" />
     <Compile Include="Assets\Scripts\HexEd\Tools\Tool.cs" />
     <Compile Include="Assets\Scripts\HexEd\UiManager.cs" />
+    <Compile Include="Assets\Scripts\HexEd\WaypointBehaviour.cs" />
+    <Compile Include="Assets\Scripts\HexEd\WaypointPartBehaviour.cs" />
     <Compile Include="Assets\Scripts\MapData\Map.cs" />
     <Compile Include="Assets\Scripts\MapData\Tile.cs" />
     <Compile Include="Assets\Scripts\MapData\TileType.cs" />

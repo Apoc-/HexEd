@@ -18,9 +18,9 @@ namespace Assets.Scripts.HexEd
         private float tileSpacing = 0f;
         private float outerRadius = 0.5f;
         private float innerRadius = 0.5f * Mathf.Sqrt(3) / 2;
-        private float baseHeight = -4f;
+        public const float BaseHeight = -4f;
 
-        void Start()
+        private void Start()
         {
             GenerateDefaultMap();
             // GenerateEmptyMap(16, 12);
@@ -32,17 +32,14 @@ namespace Assets.Scripts.HexEd
             {
                 Destroy(Map);
             }
-            
+
             Map = new GameObject("Map", typeof(Map)).GetComponent<Map>();
             Map.Tiles = new Dictionary<Vector2, Tile>();
-            Map.SetTileType(Vector2.zero, TileType.Buildslot);
-            Map.SetTileType(new Vector2(3, 3), TileType.Buildslot);
-            Map.SetTileType(new Vector2(1, 3), TileType.Buildslot);
 
-            Map.SetTileType(new Vector2(-3, 7), TileType.Buildslot);
-            Map.SetTileType(new Vector2(-1, 5), TileType.Buildslot);
-            Map.SetTileType(new Vector2(9, 9), TileType.Buildslot);
-            Map.SetTileType(new Vector2(9, -3), TileType.Buildslot);
+            for (int x = -5; x < 5; x++)
+            for (int y = -5; y < 5; y++)
+                Map.SetTileType(new Vector2(x, y), TileType.Buildslot);
+
             UiManager.Instance.Camera.CenterCameraToMap(Map);
         }
 
@@ -51,11 +48,10 @@ namespace Assets.Scripts.HexEd
 
         public void RevertLastStep() => ActionManager.Instance.RevertLastStep();
         public void RedoNextStep() => ActionManager.Instance.RedoNextStep();
-        
+
         // TODO: Refactor to separate class
         public void SaveMap()
         {
-            
         }
     }
 }

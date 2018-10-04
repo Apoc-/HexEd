@@ -28,7 +28,7 @@ public enum NeighbourIndex
     NeighbourC,
     NeighbourD,
     NeighbourE,
-    NeighbourF,
+    NeighbourF
 }
 
 
@@ -43,6 +43,9 @@ public class Map : MonoBehaviour
 
     public Dictionary<Vector2, Tile> Tiles { get; set; } = new Dictionary<Vector2, Tile>();
 
+    public Dictionary<Vector2, WaypointBehaviour> Waypoints { get; set; } =
+        new Dictionary<Vector2, WaypointBehaviour>(); // TODO: I need MULTIPLE Waypoints per tile! How address them?
+
     public void SetTileHeight(Vector2 position, float newHeight)
     {
         if (!Tiles.ContainsKey(position))
@@ -56,6 +59,9 @@ public class Map : MonoBehaviour
 
         Tiles[position].transform.position = pos;
     }
+
+
+    private static string waypointPrefabPath = "Prefabs/Waypoint";
 
     public void SetTileType(Vector2 position, TileType type)
     {
@@ -73,49 +79,30 @@ public class Map : MonoBehaviour
             TileProvider.SetTileMaterial(Tiles[position]);
         }
 
+        Tiles[position].name = "Tile [" + position.x + "," + position.y + "] " + type;
 
-        // TODO: Refactor
         // Check the fields around and create VOID tiles, if needed.
         if (type != TileType.Void)
         {
-            /*
-            // check left
-            Vector2 pos = position + new Vector2(-1, 0);
-            if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-
-            // check right
-            pos = position + new Vector2(1, 0);
-            if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-
-            pos = position + new Vector2(0, -1);
-            if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-            pos = position + new Vector2(0, 1);
-            if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-
-            if (position.y % 2 == 0)
-            {
-                pos = position + new Vector2(-1, -1);
-                if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-                pos = position + new Vector2(-1, 1);
-                if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-            }
-            else
-            {
-                pos = position + new Vector2(1, -1);
-                if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-                pos = position + new Vector2(1, 1);
-                if (!Tiles.ContainsKey(pos)) SetTileType(pos, TileType.Void);
-            }
-            //*/
-
-
             foreach (NeighbourIndex idx in Enum.GetValues(typeof(NeighbourIndex)))
             {
-                var Ypos = GetNeighbourPosition(position, idx);
-                if (!Tiles.ContainsKey(Ypos)) SetTileType(Ypos, TileType.Void);
+                var ypos = GetNeighbourPosition(position, idx);
+                if (!Tiles.ContainsKey(ypos)) SetTileType(ypos, TileType.Void);
             }
         }
 
+        /*
+        // TODO: Path End, Path Start
+        if (type == TileType.Path)
+        {
+            if (!Waypoints.ContainsKey(position))
+            {
+                Waypoints[position] = Instantiate(Resources.Load<WaypointBehaviour>(waypointPrefabPath));
+                Waypoints[position].transform.SetParent(Tiles[position].transform);
+                Waypoints[position].transform.position = Tiles[position].transform.position + new Vector3(0, 4, 0);
+            }
+        }
+        //*/
         CleanupTilesAroundPosition(position);
     }
 
