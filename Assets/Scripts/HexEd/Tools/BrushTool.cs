@@ -8,7 +8,7 @@ namespace HexEd.Tools
 {
     public class BrushTool : Tool
     {
-        public TileType selectedType = TileType.Buildslot;
+        public TileType SelectedType { get; set; } = TileType.Buildslot;
 
         public override void OnTileClick(Tile tile)
         {
@@ -18,8 +18,8 @@ namespace HexEd.Tools
 
         public override void OnTileDrag(Tile tile)
         {
-            if (tile.Type == selectedType) return;
-            var action = new TileAction(tile).SetNewType(selectedType);
+            if (tile.Type == SelectedType) return;
+            var action = new TileAction(tile).SetNewType(SelectedType);
             ActionManager.Instance.AddAndExecuteAction(action);
         }
 

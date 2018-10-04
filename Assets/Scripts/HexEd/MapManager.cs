@@ -14,10 +14,6 @@ namespace Assets.Scripts.HexEd
     public class MapManager : Singleton<MapManager>
     {
         public Map Map { get; private set; }
-
-        private float tileSpacing = 0f;
-        private float outerRadius = 0.5f;
-        private float innerRadius = 0.5f * Mathf.Sqrt(3) / 2;
         public const float BaseHeight = -4f;
 
         private void Start()

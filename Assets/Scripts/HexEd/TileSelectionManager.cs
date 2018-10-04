@@ -20,7 +20,6 @@ namespace Assets.Scripts.HexEd
 
 
         private Tile _firstSelectedTile;
-        private Tile _currentSelectedTile;
         private Tool _currentSelectedTool;
         private Tile _lastDraggedTile;
 
@@ -48,7 +47,7 @@ namespace Assets.Scripts.HexEd
                 {
                     //SelectTile(tile);
                     _lastMousePosition = _initialMousePosition = Input.mousePosition;
-                    _currentSelectedTile = _firstSelectedTile = tile;
+                    _firstSelectedTile = tile;
                     _currentSelectedTool.OnTileClick(tile);
                     if (tile.Type != TileType.Void)
                         _currentSelectedTool.OnTileScrollStart(tile, _initialMousePosition);
@@ -61,7 +60,6 @@ namespace Assets.Scripts.HexEd
                 _mouseLdown = false;
                 _lastDraggedTile = null;
                 _firstSelectedTile = null;
-                _currentSelectedTile = null;
                 return;
             }
 
@@ -84,7 +82,7 @@ namespace Assets.Scripts.HexEd
 
                 if (tile != null)
                 {
-                    _currentSelectedTile = _lastDraggedTile = tile;
+                    _lastDraggedTile = tile;
                     _currentSelectedTool.OnTileDrag(_lastDraggedTile);
                 }
             }
@@ -120,7 +118,7 @@ namespace Assets.Scripts.HexEd
         public void SetBrush()
         {
             var tileType = (TileType) BrushDropdown.value;
-            _toolBrush.selectedType = tileType;
+            _toolBrush.SelectedType = tileType;
         }
     }
 }
